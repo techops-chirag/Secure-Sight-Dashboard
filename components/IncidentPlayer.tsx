@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 
 interface Camera {
   id: string;
@@ -8,9 +9,22 @@ interface Camera {
   location: string;
 }
 
+interface Incident {
+  id: string;
+  type: string;
+  tsStart: string;
+  tsEnd: string;
+  thumbnailUrl: string;
+  resolved: boolean;
+  camera: {
+    name: string;
+    location: string;
+  };
+}
+
 interface IncidentPlayerProps {
   cameras: Camera[];
-  selectedIncident?: any;
+  selectedIncident?: Incident | null;
 }
 
 const IncidentPlayer: React.FC<IncidentPlayerProps> = ({ cameras, selectedIncident }) => {
@@ -80,12 +94,14 @@ const IncidentPlayer: React.FC<IncidentPlayerProps> = ({ cameras, selectedIncide
         {selectedIncident ? (
           <>
             {!imageError ? (
-              <img 
-                src={selectedIncident.thumbnailUrl} 
+              <Image
+                src={selectedIncident.thumbnailUrl}
                 alt="Incident footage"
-                className="w-full h-full object-cover rounded-lg"
+                fill
+                className="object-cover rounded-lg"
                 onError={handleImageError}
                 onLoad={handleImageLoad}
+                sizes="(max-width: 768px) 100vw, 66vw"
               />
             ) : (
               <div className="absolute inset-0 flex flex-col items-center justify-center text-gray-400">

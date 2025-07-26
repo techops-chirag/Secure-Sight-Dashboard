@@ -11,9 +11,22 @@ interface Camera {
   location: string;
 }
 
+interface Incident {
+  id: string;
+  type: string;
+  tsStart: string;
+  tsEnd: string;
+  thumbnailUrl: string;
+  resolved: boolean;
+  camera: {
+    name: string;
+    location: string;
+  };
+}
+
 export default function Dashboard() {
   const [cameras, setCameras] = useState<Camera[]>([]);
-  const [selectedIncident, setSelectedIncident] = useState(null);
+  const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
 
   useEffect(() => {
     const mockCameras = [
@@ -24,13 +37,12 @@ export default function Dashboard() {
     setCameras(mockCameras);
   }, []);
 
-  const handleIncidentSelect = (incident: any) => {
-    console.log('Selected incident:', incident); // Debug log
-    console.log('Thumbnail URL:', incident.thumbnailUrl); // Debug log
+  const handleIncidentSelect = (incident: Incident) => {
+    console.log('Selected incident:', incident);
+    console.log('Thumbnail URL:', incident.thumbnailUrl);
     setSelectedIncident(incident);
   };
 
-  // Debug: log the current selected incident
   useEffect(() => {
     console.log('Current selected incident:', selectedIncident);
   }, [selectedIncident]);

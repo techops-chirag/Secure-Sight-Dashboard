@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 interface Incident {
   id: string;
@@ -52,7 +53,7 @@ const IncidentList: React.FC<IncidentListProps> = ({ onIncidentSelect }) => {
       
     } catch (error) {
       console.error('Error fetching incidents:', error);
-      setError(error.message || 'Failed to fetch incidents');
+      setError(error instanceof Error ? error.message : 'Failed to fetch incidents');
     } finally {
       setLoading(false);
     }
@@ -85,7 +86,7 @@ const IncidentList: React.FC<IncidentListProps> = ({ onIncidentSelect }) => {
       
     } catch (error) {
       console.error('Error resolving incident:', error);
-      setError(`Failed to resolve incident: ${error.message}`);
+      setError(`Failed to resolve incident: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setResolvingIds(prev => {
         const newSet = new Set(prev);
@@ -197,22 +198,16 @@ const IncidentList: React.FC<IncidentListProps> = ({ onIncidentSelect }) => {
               onClick={() => onIncidentSelect(incident)}
             >
               <div className="flex items-start space-x-3">
-                <img
-                  src={incident.thumbnailUrl}
-                  alt="Incident thumbnail"
-                  className="w-16 h-12 bg-gray-600 rounded object-cover"
-                  onError={(e) => {
-                    //(e.target as HTMLImageElement).src = '/placeholder-thumb.jpg';
-                const target = e.target as HTMLImageElement;
-    target.style.display = 'none';
-    target.nextElementSibling?.remove(); // Remove any existing placeholder
-    
-    const placeholder = document.createElement('div');
-    placeholder.className = 'w-16 h-12 bg-gray-600 rounded flex items-center justify-center text-gray-400 text-xs';
-    placeholder.innerHTML = '<span>📹</span>';
-    target.parentNode?.insertBefore(placeholder, target.nextSibling); 
-                }}
-                />
+                <div className="relative w-16 h-12 bg-gray-600 rounded overflow-hidden">
+                  <Image
+                    src={incident.thumbnailUrl}
+                    alt="Incident thumbnail"
+                    fill
+                    className="object-cover"
+                    sizes="64px"
+                    onError={() => console.log('Image failed to load:', incident.thumbnailUrl)}
+                  />
+                </div>
                 
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center space-x-2 mb-1">
