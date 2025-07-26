@@ -32,8 +32,15 @@ export async function PATCH(
     return NextResponse.json(updatedIncident);
   } catch (error) {
     console.error('Error updating incident:', error);
+    
+    // Fix: Properly handle the unknown error type
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    
     return NextResponse.json(
-      { error: 'Failed to update incident', details: error.message }, 
+      { 
+        error: 'Failed to update incident', 
+        details: errorMessage 
+      }, 
       { status: 500 }
     );
   }
