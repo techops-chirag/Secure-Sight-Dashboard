@@ -21,8 +21,15 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(incidents);
   } catch (error) {
     console.error('Error fetching incidents:', error);
+    
+    // Fix: Properly handle the unknown error type
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+    
     return NextResponse.json(
-      { error: 'Failed to fetch incidents', details: error.message }, 
+      { 
+        error: 'Failed to fetch incidents', 
+        details: errorMessage 
+      }, 
       { status: 500 }
     );
   }
