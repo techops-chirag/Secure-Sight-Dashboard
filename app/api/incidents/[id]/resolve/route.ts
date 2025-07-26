@@ -1,39 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
 
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    // Await the params in Next.js 15
     const { id } = await params;
     
     if (!id) {
       return NextResponse.json({ error: 'Incident ID is required' }, { status: 400 });
     }
 
-    const incident = await prisma.incident.findUnique({
-      where: { id },
-    });
-
-    if (!incident) {
-      return NextResponse.json({ error: 'Incident not found' }, { status: 404 });
-    }
-
-    const updatedIncident = await prisma.incident.update({
-      where: { id },
-      data: { resolved: !incident.resolved },
-      include: {
-        camera: true,
+    // Mock response for demo
+    const updatedIncident = {
+      id,
+      type: 'Resolved Incident',
+      tsStart: new Date().toISOString(),
+      tsEnd: new Date().toISOString(),
+      thumbnailUrl: '/thumbnails/thumb-1.jpeg',
+      resolved: true,
+      camera: {
+        name: 'Mock Camera',
+        location: 'Mock Location',
       },
-    });
+    };
 
     return NextResponse.json(updatedIncident);
   } catch (error) {
     console.error('Error updating incident:', error);
     
-    // Fix: Properly handle the unknown error type
     const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     
     return NextResponse.json(
