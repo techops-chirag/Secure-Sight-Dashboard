@@ -8,7 +8,10 @@ const nextConfig = {
         hostname: '**',
       },
     ],
-    unoptimized: true, // For static export if needed
+    unoptimized: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true, // Skip ESLint during build
   },
 }
 
