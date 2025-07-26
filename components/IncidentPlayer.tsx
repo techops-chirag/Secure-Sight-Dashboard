@@ -55,7 +55,7 @@ const IncidentPlayer: React.FC<IncidentPlayerProps> = ({ cameras, selectedIncide
           ))}
         </div>
         <div className="absolute bottom-2 left-2 text-green-400 text-xs font-mono">
-          LIVE • {cameraName.substring(0, 8)}
+          LIVE • {cameraName.substring(0, 12)}
         </div>
         <div className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse" />
       </div>,
