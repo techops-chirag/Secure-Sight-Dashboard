@@ -11,7 +11,13 @@ const nextConfig = {
     unoptimized: true,
   },
   eslint: {
-    ignoreDuringBuilds: true, // Skip ESLint during build
+    ignoreDuringBuilds: true,
+  },
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  experimental: {
+    serverComponentsExternalPackages: ['@prisma/client'],
   },
 }
 
